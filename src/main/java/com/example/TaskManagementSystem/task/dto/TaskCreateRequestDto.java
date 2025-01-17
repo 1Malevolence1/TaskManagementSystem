@@ -8,5 +8,5 @@ import com.example.TaskManagementSystem.task.model.Task;
  * DTO for {@link Task}
  */
 public record TaskCreateRequestDto(String title, String description, Status status, Priority priority, Long authorId,
-                                   Long assigneeIdId) {
+                                   Long assigneeId) {
 }

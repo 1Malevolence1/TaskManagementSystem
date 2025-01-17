@@ -4,17 +4,20 @@ import com.example.TaskManagementSystem.task.dto.TaskCreateRequestDto;
 import com.example.TaskManagementSystem.task.dto.TaskResponseDto;
 import com.example.TaskManagementSystem.task.dto.TaskUpdateRequestDto;
 import com.example.TaskManagementSystem.task.mapper.TaskMapperManager;
+import com.example.TaskManagementSystem.task.model.Task;
 import com.example.TaskManagementSystem.task.repostory.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository repository;
@@ -50,8 +53,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponseDto get(Long id) {
-        return mapper.toDto(
-                repository.findById(id).orElseThrow(() -> new NoSuchElementException("Not found task by ID::%d".formatted(id)))
-        );
+      Task task =   repository.findById(id).orElseThrow(() -> new NoSuchElementException("Not found task by ID::%d".formatted(id)));
+      log.info("{}", task.toString());
+      return mapper.toDto(task);
+
     }
 }

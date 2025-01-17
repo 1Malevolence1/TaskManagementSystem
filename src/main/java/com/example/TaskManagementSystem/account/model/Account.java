@@ -24,10 +24,10 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "account_email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "account_password", nullable = false)
     private String password;
 
 

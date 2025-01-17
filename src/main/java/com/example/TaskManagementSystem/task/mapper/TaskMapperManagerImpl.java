@@ -26,6 +26,6 @@ public class TaskMapperManagerImpl implements TaskMapperManager {
 
     @Override
     public TaskResponseDto toDto(Task model) {
-        return taskMapper.toBookResponseDto(model);
+        return taskMapper.toTaskResponseDto(model);
     }
 }

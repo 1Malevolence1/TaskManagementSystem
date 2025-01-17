@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/comment")
+@RequestMapping("api/task/{taskId:\\d+}/comment")
 @RequiredArgsConstructor
 @Slf4j
 public class CommentRestController {
 
     private final CommentService commentService;
 
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<Void> createComment(@RequestBody CommentCreateRequestDto dto){
         log.info("start method by create Comment. Dto: {}", dto);
         commentService.create(dto);
@@ -28,7 +28,7 @@ public class CommentRestController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("{commentId:\\d+}/delete")
+    @DeleteMapping("{commentId:\\d+}")
     public ResponseEntity<Void> deleteComment(@PathVariable(name = "commentId") Long id){
         log.info("start method by delete Comment. ID: {}", id);
         commentService.delete(id);
@@ -39,8 +39,8 @@ public class CommentRestController {
 
 
     // Добавить проверку на то, что задача есть
-    @GetMapping("/task/{taskId:\\d+}")
-    public ResponseEntity<List<CommentResponseDto>> getAllCommentByTaskId(@PathVariable(name = "taskId") Long id){
+    @GetMapping("")
+    public ResponseEntity<List<CommentResponseDto>> getCommentsForTask(@PathVariable(name = "taskId") Long id){
         log.info("start method getAllCommentByTaskId. taskID: {}", id);
        List<CommentResponseDto> dto =  commentService.getAllByTaskId(id);
         log.info("methode complete");

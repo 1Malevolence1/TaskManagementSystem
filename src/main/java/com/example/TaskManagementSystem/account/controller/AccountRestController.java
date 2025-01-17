@@ -19,8 +19,8 @@ public class AccountRestController {
 
     private final AccountService accountService;
 
-    @GetMapping("{accountId:\\d+}")
-    public ResponseEntity<AccountResponseDto> getTask(@PathVariable(name = "accountId") Long id){
+    @GetMapping("/{accountId:\\d+}")
+    public ResponseEntity<AccountResponseDto> getAccount(@PathVariable(name = "accountId") Long id){
         return ResponseEntity.ok(
                 accountService.get(id)
         );

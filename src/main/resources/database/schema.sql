@@ -12,9 +12,7 @@ create table if not exists public.account(
         role_id int,
 
         foreign key(role_id) references public.account_role(role_id)
-
 );
-
 
 create table if not exists public.task(
      task_id serial primary key,
@@ -30,4 +28,12 @@ create table if not exists public.task(
 );
 
 
+create table if not exists public.comment(
+    comment_id serial primary key,
+    comment_text text not null,
+    task_id bigint not null,
+    account_id bigint not null,
 
+    foreign key(task_id) references public.task(task_id),
+    foreign key(account_id) references public.account(account_id)
+);
