@@ -1,6 +1,7 @@
 package com.example.TaskManagementSystem.task.model;
 
 
+import com.example.TaskManagementSystem.account.model.Account;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,4 +33,12 @@ public class Task {
     @Column(name = "priority", nullable = false)
     @Enumerated(EnumType.STRING)
     private Priority priority;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "authorId", nullable = false)
+    private Account authorId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "authorId", nullable = false)
+    private Account assigentId;
 }
