@@ -35,10 +35,10 @@ public class Task {
     private Priority priority;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authorId", nullable = false)
+    @JoinColumn(name = "author_id", nullable = false)
     private Account authorId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authorId", nullable = false)
-    private Account assigentId;
+    @JoinColumn(name = "assignee_id", nullable = false)
+    private Account assigneeId;
 }

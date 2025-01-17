@@ -35,6 +35,5 @@ public class Account {
     private Role role;
 
     @OneToMany(mappedBy = "authorId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
     private List<Task> tasks;
 }
