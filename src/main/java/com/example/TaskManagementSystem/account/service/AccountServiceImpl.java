@@ -1,6 +1,7 @@
 package com.example.TaskManagementSystem.account.service;
 
 import com.example.TaskManagementSystem.account.dto.AccountCreateRequestDto;
+import com.example.TaskManagementSystem.account.dto.AccountRegistrationRequestDto;
 import com.example.TaskManagementSystem.account.dto.AccountResponseDto;
 import com.example.TaskManagementSystem.account.mapper.AccountMapperManager;
 import com.example.TaskManagementSystem.account.repository.AccountRepository;
@@ -19,6 +20,11 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountMapperManager mapper;
     private final AccountRepository repository;
+
+    @Override
+    public void create(AccountRegistrationRequestDto dto) {
+
+    }
 
     @Override
     public void create(AccountCreateRequestDto dto) {
