@@ -1,0 +1,18 @@
+spring:
+    application:
+        name: TaskManagementSystem
+
+
+    datasource:
+        url: jdbc:postgresql://localhost:5433/taskManagementSystem
+        username: user
+        password: 123
+
+    sql:
+        init:
+            schema-locations: classpath:/database/schema.sql
+            mode: always
+
+server:
+    port: 8090
+

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TaskMapperManagerImpl implements TaskMapperManager {
 
-    private TaskMapper taskMapper;
+    private final TaskMapper taskMapper;
 
     @Override
     public Task toModel(TaskCreateRequestDto dto) {
