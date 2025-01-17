@@ -2,8 +2,11 @@ package com.example.TaskManagementSystem.task.model;
 
 
 import com.example.TaskManagementSystem.account.model.Account;
+import com.example.TaskManagementSystem.comment.model.Comment;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "task", schema = "public")
@@ -36,9 +39,12 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
-    private Account authorId;
+    private Account author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id", nullable = false)
-    private Account assigneeId;
+    private Account assignee;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments;
 }

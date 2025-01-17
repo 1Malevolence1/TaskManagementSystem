@@ -1,6 +1,7 @@
 package com.example.TaskManagementSystem.account.model;
 
 
+import com.example.TaskManagementSystem.comment.model.Comment;
 import com.example.TaskManagementSystem.task.model.Task;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,6 +35,9 @@ public class Account {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "authorId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments;
 }
