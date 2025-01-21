@@ -4,7 +4,6 @@ create table if not exists public.account_role(
     role_name varchar(30) not null unique
 );
 
-
 create table if not exists public.account(
         account_id serial primary key,
         account_emial varchar(100) not null,

@@ -4,8 +4,11 @@ import com.example.TaskManagementSystem.comment.dto.CommentCreateRequestDto;
 import com.example.TaskManagementSystem.comment.dto.CommentResponseDto;
 import com.example.TaskManagementSystem.comment.mapper.CommentMapperManager;
 import com.example.TaskManagementSystem.comment.repository.CommentRepository;
+import com.example.TaskManagementSystem.utils.exception.Error;
+import com.example.TaskManagementSystem.utils.exception.PersistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +25,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void create(CommentCreateRequestDto dto) {
-            repository.save(
-                    mapper.toModel(
-                            dto
-                    )
-            );
+
+         try {
+             repository.save(
+                     mapper.toModel(
+                             dto
+                     )
+             );
+         } catch (DataAccessException e){
+             throw new PersistenceException(new Error(e.getMessage()), e);
+         }
     }
 
     @Override
