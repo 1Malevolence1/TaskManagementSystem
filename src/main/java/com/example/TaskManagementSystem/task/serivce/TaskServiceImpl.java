@@ -91,4 +91,9 @@ public class TaskServiceImpl implements TaskService {
         return mapper.toDto(task);
 
     }
+
+    @Override
+    public boolean exist(Long taskId) {
+        return repository.existsById(taskId);
+    }
 }

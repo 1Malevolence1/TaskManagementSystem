@@ -11,4 +11,5 @@ public interface TaskService {
     void update(TaskUserUpdateRequestDto dto);
     void delete(Long id);
     TaskResponseDto get(Long id);
+    boolean exist(Long taskId);
 }

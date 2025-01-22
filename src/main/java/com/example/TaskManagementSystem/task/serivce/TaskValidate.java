@@ -42,7 +42,7 @@ public class TaskValidate {
     }
 
 
-    private void validateTaskExists(Long taskId){
+    public void validateTaskExists(Long taskId){
         taskExistValidate.checkTaskExistence(taskId);
     }
 
