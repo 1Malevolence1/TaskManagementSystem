@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void create(CommentCreateRequestDto dto) {
-        commentValidate.validate(dto.taskId(), dto.accountId());
+        commentValidate.validate(dto.taskId(), dto.accountId(), null);
          try {
              repository.save(
                      mapper.toModel(

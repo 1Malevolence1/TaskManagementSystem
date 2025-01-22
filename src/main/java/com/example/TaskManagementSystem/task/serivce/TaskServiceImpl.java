@@ -1,9 +1,6 @@
 package com.example.TaskManagementSystem.task.serivce;
 
-import com.example.TaskManagementSystem.task.dto.TaskAdminUpdateRequestDto;
-import com.example.TaskManagementSystem.task.dto.TaskCreateRequestDto;
-import com.example.TaskManagementSystem.task.dto.TaskResponseDto;
-import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
+import com.example.TaskManagementSystem.task.dto.*;
 import com.example.TaskManagementSystem.utils.exception.Error;
 import com.example.TaskManagementSystem.utils.exception.PersistenceException;
 import com.example.TaskManagementSystem.task.mapper.TaskMapperManager;
@@ -77,6 +74,11 @@ public class TaskServiceImpl implements TaskService {
         } catch (DataAccessException e) {
             throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных"), e);
         }
+    }
+
+    @Override
+    public TaskIdsDto getIdsAccount(Long taskId) {
+        return repository.findIdsAuthorAndAssigneeByTaskId(taskId);
     }
 
     @Override

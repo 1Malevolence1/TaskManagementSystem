@@ -15,7 +15,8 @@ public class TaskValidate {
     private final TaskSelfAssignmentValidator taskSelfAssignmentValidator;
     private final TaskExistValidate taskExistValidate;
     private final TaskEnumTypeValidate taskEnumTypeValidate;
-    private final TaskBelongAssignValidate taskBelongAssignValidate;
+    private final TaskBelongAccountValidate taskBelongAccountValidate;
+
 
 
     public void validate(TaskCreateRequestDto dto) {
@@ -57,7 +58,13 @@ public class TaskValidate {
         taskEnumTypeValidate.validatePriority(priority);
     }
 
-    private void validateTaskBelongAssignee(Long assignId, Long taskId) {
-        taskBelongAssignValidate.validateBelong(assignId, taskId);
+    public void validateTaskBelongAssignee(Long assignId, Long taskId) {
+        taskBelongAccountValidate.validateBelongAssignee(assignId, taskId);
     }
+
+    public void validateTaskBelongAuthor(Long authorId, Long taskId) {
+        taskBelongAccountValidate.validateBelongAssignee(authorId, taskId);
+    }
+
+
 }
