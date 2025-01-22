@@ -14,10 +14,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -107,17 +109,19 @@ public class TaskServiceImpl implements TaskService {
         return repository.existsById(taskId);
     }
 
-    @Override
-    public List<TaskResponseDto> getAllTasksById(Long accountId, Status status, Priority priority) {
+
+
+    public Page<TaskResponseDto> getAllTasksById(Long accountId, Status status, Priority priority, int size, int page) {
+
+        Pageable pageable = PageRequest.of(page, size);
 
         Specification<Task> spec = Specification
                 .where(taskSpecification.hasAccount(accountId))
                 .and(taskSpecification.hasStatus(status))
                 .and(taskSpecification.hasPriority(priority));
 
+        Page<Task> taskPage = repository.findAll(spec, pageable);
 
-         return mapper.toDtoList(
-                 repository.findAll(spec)
-         );
+         return taskPage.map(mapper::toDto);
     }
 }

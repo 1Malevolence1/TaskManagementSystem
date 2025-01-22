@@ -5,6 +5,7 @@ import com.example.TaskManagementSystem.task.dto.TaskResponseDto;
 import com.example.TaskManagementSystem.task.dto.TaskAdminUpdateRequestDto;
 import com.example.TaskManagementSystem.task.model.Task;
 import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface TaskMapperManager {
     Task toModel (TaskAdminUpdateRequestDto dto);
     Task toModel (TaskUserUpdateRequestDto dto);
     TaskResponseDto toDto(Task model);
-    List<TaskResponseDto> toDtoList(List<Task> model);
+    List<TaskResponseDto> toDtoList(Page<Task> model);
 }

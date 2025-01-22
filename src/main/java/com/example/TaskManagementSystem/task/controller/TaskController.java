@@ -10,6 +10,7 @@ import com.example.TaskManagementSystem.utils.BindingResultValidate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -47,11 +48,14 @@ public class TaskController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<List<TaskResponseDto>> getTaskById(
+    public ResponseEntity<Page<TaskResponseDto>> getTaskById(
             @RequestParam(name = "accountId", required = false) Long id,
             @RequestParam(name = "status", required = false) Status status,
-            @RequestParam(name = "priority", required = false)Priority priority){
+            @RequestParam(name = "priority", required = false)Priority priority,
+            @RequestParam(name = "size", defaultValue = "10") Integer size,
+            @RequestParam(name = "page", defaultValue = "1") Integer page){
 
-        return ResponseEntity.ok(taskService.getAllTasksById(id, status, priority));
+
+        return ResponseEntity.ok(taskService.getAllTasksById(id, status, priority, size, page));
     }
 }

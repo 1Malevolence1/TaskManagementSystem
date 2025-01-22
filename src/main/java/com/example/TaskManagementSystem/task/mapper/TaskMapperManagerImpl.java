@@ -6,6 +6,7 @@ import com.example.TaskManagementSystem.task.dto.TaskResponseDto;
 import com.example.TaskManagementSystem.task.model.Task;
 import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,8 +38,9 @@ public class TaskMapperManagerImpl implements TaskMapperManager {
         return taskMapper.toTaskResponseDto(model);
     }
 
+
     @Override
-    public List<TaskResponseDto> toDtoList(List<Task> model) {
+    public List<TaskResponseDto> toDtoList(Page<Task> model) {
         return taskMapperList.toDto(model);
     }
 }
