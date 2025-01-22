@@ -1,5 +1,6 @@
 package com.example.TaskManagementSystem.task.serivce;
 
+import com.example.TaskManagementSystem.account.AccountValidate;
 import com.example.TaskManagementSystem.task.dto.*;
 import com.example.TaskManagementSystem.utils.exception.Error;
 import com.example.TaskManagementSystem.utils.exception.PersistenceException;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -24,6 +26,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository repository;
     private final TaskMapperManager mapper;
     private final TaskValidate taskValidate;
+    private final AccountValidate accountValidate;
 
 
     @Override
@@ -46,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
             repository.findById(dto.id()).ifPresentOrElse(
                     task -> {
                         if (dto.title() != null) task.setTitle(mapperTask.getTitle());
-                        if (dto.description() != null) task.setDescription(mapperTask.getDescription());
+                     //   if (dto.description() != null) task.setDescription(mapperTask.getDescription());
                         if (dto.status() != null) task.setStatus(mapperTask.getStatus());
                         if (dto.priority() != null) task.setPriority(mapperTask.getPriority());
                     }, () -> {
@@ -97,5 +100,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public boolean exist(Long taskId) {
         return repository.existsById(taskId);
+    }
+
+    @Override
+    public List<TaskResponseDto> getAllTasksById(Long accountId) {
+        accountValidate.validateAccountExists(accountId);
+        List<Task> list = repository.findTasksByAccountId(accountId);
+        log.info("{}", list);
+        return mapper.toDtoList(list);
     }
 }

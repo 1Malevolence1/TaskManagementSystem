@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @Setter
 @Getter
+@ToString
 public class Task {
 
     @Id
@@ -25,8 +26,8 @@ public class Task {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Lob
-    @Column(name = "description", nullable = false)
+
+    @Column(name = "description", nullable = false, columnDefinition = "text")
     private String description;
 
     @Column(name = "status", nullable = false)
@@ -37,12 +38,27 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", priority=" + priority +
+                ", author=" + author +
+                ", assignee=" + assignee +
+                ", comments=" + comments +
+                '}';
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private Account author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id", nullable = false)
+
     private Account assignee;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

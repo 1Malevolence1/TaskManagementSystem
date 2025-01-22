@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/task")
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class TaskController {
     }
 
     
-    @PutMapping("/user/update")
+    @PutMapping("/account/update")
     public ResponseEntity<Void> updateUserTask(@Valid @RequestBody TaskUserUpdateRequestDto dto, BindingResult bindingResult){
         log.info("start method updateUserTask. Dto: {}", dto);
 
@@ -40,5 +42,10 @@ public class TaskController {
         log.info("task update");
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/account/{accountId:\\d+}")
+    public ResponseEntity<List<TaskResponseDto>> getTaskById(@PathVariable(name = "accountId") Long id){
+        return ResponseEntity.ok(taskService.getAllTasksById(id));
     }
 }

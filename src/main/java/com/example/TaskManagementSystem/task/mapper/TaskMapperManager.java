@@ -6,10 +6,13 @@ import com.example.TaskManagementSystem.task.dto.TaskAdminUpdateRequestDto;
 import com.example.TaskManagementSystem.task.model.Task;
 import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
 
+import java.util.List;
+
 public interface TaskMapperManager {
 
     Task toModel (TaskCreateRequestDto dto);
     Task toModel (TaskAdminUpdateRequestDto dto);
     Task toModel (TaskUserUpdateRequestDto dto);
     TaskResponseDto toDto(Task model);
+    List<TaskResponseDto> toDtoList(List<Task> model);
 }

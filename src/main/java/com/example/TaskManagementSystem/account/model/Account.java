@@ -39,7 +39,12 @@ public class Account implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Task> tasks;
+    private List<Task> authoredTasks;
+
+
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Task> assignedTasks;
+
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;

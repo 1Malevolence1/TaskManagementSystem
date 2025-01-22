@@ -14,6 +14,7 @@ import lombok.*;
 @Builder
 @Setter
 @Getter
+@ToString
 public class Comment {
 
     @Id
@@ -31,4 +32,14 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", task=" + task.getId() +
+                ", account=" + account.getId() +
+                '}';
+    }
 }

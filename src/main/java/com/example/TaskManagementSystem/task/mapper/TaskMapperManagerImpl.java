@@ -8,13 +8,15 @@ import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 
 @Component
 @RequiredArgsConstructor
 public class TaskMapperManagerImpl implements TaskMapperManager {
 
     private final TaskMapper taskMapper;
-
+    private final TaskMapperList taskMapperList;
     @Override
     public Task toModel(TaskCreateRequestDto dto) {
         return taskMapper.toEntity(dto);
@@ -33,5 +35,10 @@ public class TaskMapperManagerImpl implements TaskMapperManager {
     @Override
     public TaskResponseDto toDto(Task model) {
         return taskMapper.toTaskResponseDto(model);
+    }
+
+    @Override
+    public List<TaskResponseDto> toDtoList(List<Task> model) {
+        return taskMapperList.toDto(model);
     }
 }

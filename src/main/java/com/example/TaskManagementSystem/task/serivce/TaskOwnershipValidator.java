@@ -20,14 +20,7 @@ public class TaskOwnershipValidator {
     private final TaskService taskService;
     public void validateTaskOwnership(Long taskId, Long accountId, String role) {
         TaskIdsDto ids = taskService.getIdsAccount(taskId);
-        if (role.equals("ROLE_ADMIN")) {
-
-            if (!Objects.equals(ids.authorId(), accountId)) {
-                throw new AuthorDoesNotBelongTask(new Error(
-                        "Задача с ID:: %d не принадлежит администратору с ID:: %d".formatted(taskId, accountId)
-                ));
-            }
-        } else if (role.equals("ROLE_USER")) {
+        if (role.equals("ROLE_USER")) {
 
             if (!Objects.equals(ids.assigneeId(), accountId)) {
                 throw new AssigneeDoesNotBelongTask(new Error(
@@ -35,7 +28,6 @@ public class TaskOwnershipValidator {
                 ));
             }
         } else {
-
             throw new IllegalArgumentException("Неизвестная роль: " + role);
         }
     }
