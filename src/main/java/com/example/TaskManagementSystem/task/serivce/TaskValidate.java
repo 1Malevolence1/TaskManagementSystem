@@ -15,17 +15,20 @@ public class TaskValidate {
     private final TaskSelfAssignmentValidator taskSelfAssignmentValidator;
     private final TaskExistValidate taskExistValidate;
     private final TaskEnumTypeValidate taskEnumTypeValidate;
-
+    private final TaskBelongAssignValidate taskBelongAssignValidate;
 
 
     public void validate(TaskCreateRequestDto dto) {
-        validateSelfAssignment(dto.authorId(), dto.assigneeId());
+        if (dto.assigneeId() != null) {
+            validateSelfAssignment(dto.authorId(), dto.assigneeId());
+        }
         validateStatusType(dto.status());
         validatePriorityType(dto.priority());
     }
 
-    public void validate(TaskUserUpdateRequestDto dto) {
+    public void validate(TaskUserUpdateRequestDto dto, Long assigneeId) {
         validateTaskExists(dto.id());
+        validateTaskBelongAssignee(assigneeId, dto.id());
         validateStatusType(dto.status());
     }
 
@@ -37,20 +40,24 @@ public class TaskValidate {
     }
 
 
-    private void validateSelfAssignment(Long authorId, Long assigneeId){
+    private void validateSelfAssignment(Long authorId, Long assigneeId) {
         taskSelfAssignmentValidator.validateSelfAssignment(authorId, assigneeId);
     }
 
 
-    public void validateTaskExists(Long taskId){
+    public void validateTaskExists(Long taskId) {
         taskExistValidate.checkTaskExistence(taskId);
     }
 
-    private void validateStatusType(String status){
+    private void validateStatusType(String status) {
         taskEnumTypeValidate.validateStatus(status);
     }
 
-    private void validatePriorityType(String priority){
+    private void validatePriorityType(String priority) {
         taskEnumTypeValidate.validatePriority(priority);
+    }
+
+    private void validateTaskBelongAssignee(Long assignId, Long taskId) {
+        taskBelongAssignValidate.validateBelong(assignId, taskId);
     }
 }

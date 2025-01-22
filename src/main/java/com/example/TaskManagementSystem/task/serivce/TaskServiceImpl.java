@@ -63,8 +63,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void update(TaskUserUpdateRequestDto dto) {
-        taskValidate.validate(dto);
+    public void update(TaskUserUpdateRequestDto dto, Long assigneeId) {
+        taskValidate.validate(dto, assigneeId);
         Task mapperTask = mapper.toModel(dto);
         try {
             repository.findById(dto.id()).ifPresentOrElse(

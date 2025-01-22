@@ -8,5 +8,6 @@ public interface AccountService {
 
     void create(AccountRegistrationRequestDto dto);
     void create(AccountCreateRequestDto dto);
+    boolean exits(Long accountId);
     AccountResponseDto get(Long id);
 }

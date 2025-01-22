@@ -34,6 +34,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public boolean exits(Long accountId) {
+        return repository.existsById(accountId);
+    }
+
+    @Override
     public AccountResponseDto get(Long id) {
         return mapper.toDto(
                 repository.findById(id).orElseThrow(() ->

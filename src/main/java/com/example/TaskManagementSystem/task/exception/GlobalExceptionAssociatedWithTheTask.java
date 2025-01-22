@@ -36,6 +36,10 @@ public class GlobalExceptionAssociatedWithTheTask {
         return ResponseEntity.badRequest().body(e.getError());
     }
 
+    @ExceptionHandler(AssigneeDoesNotBelongTask.class)
+    public ResponseEntity<Error> handlerAssigneeDoesNotBelongTask(AssigneeDoesNotBelongTask e){
+        return ResponseEntity.badRequest().body(e.getError());
+    }
 
 
 

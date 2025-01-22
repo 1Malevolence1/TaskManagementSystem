@@ -8,7 +8,7 @@ import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
 public interface TaskService {
     void create(TaskCreateRequestDto dto);
     void update(TaskAdminUpdateRequestDto dto,  Long authorId);
-    void update(TaskUserUpdateRequestDto dto);
+    void update(TaskUserUpdateRequestDto dto, Long assigneeId);
     void delete(Long id);
     TaskResponseDto get(Long id);
     boolean exist(Long taskId);

@@ -24,9 +24,11 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository repository;
     private final CommentMapperManager mapper;
     private final TaskValidate taskValidate;
+    private final CommentValidate commentValidate;
 
     @Override
     public void create(CommentCreateRequestDto dto) {
+        commentValidate.validate(dto.taskId(), dto.accountId());
          try {
              repository.save(
                      mapper.toModel(
