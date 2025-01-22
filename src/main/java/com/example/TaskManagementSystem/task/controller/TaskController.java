@@ -3,6 +3,8 @@ package com.example.TaskManagementSystem.task.controller;
 
 import com.example.TaskManagementSystem.task.dto.TaskResponseDto;
 import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
+import com.example.TaskManagementSystem.task.model.Priority;
+import com.example.TaskManagementSystem.task.model.Status;
 import com.example.TaskManagementSystem.task.serivce.TaskService;
 import com.example.TaskManagementSystem.utils.BindingResultValidate;
 import jakarta.validation.Valid;
@@ -44,8 +46,12 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/account/{accountId:\\d+}")
-    public ResponseEntity<List<TaskResponseDto>> getTaskById(@PathVariable(name = "accountId") Long id){
-        return ResponseEntity.ok(taskService.getAllTasksById(id));
+    @GetMapping("/get/all")
+    public ResponseEntity<List<TaskResponseDto>> getTaskById(
+            @RequestParam(name = "accountId", required = false) Long id,
+            @RequestParam(name = "status", required = false) Status status,
+            @RequestParam(name = "priority", required = false)Priority priority){
+
+        return ResponseEntity.ok(taskService.getAllTasksById(id, status, priority));
     }
 }

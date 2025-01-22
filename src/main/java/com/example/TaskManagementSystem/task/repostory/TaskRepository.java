@@ -3,13 +3,14 @@ package com.example.TaskManagementSystem.task.repostory;
 import com.example.TaskManagementSystem.task.dto.TaskIdsDto;
 import com.example.TaskManagementSystem.task.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 
-public interface TaskRepository extends JpaRepository<Task, Long> {
+public interface TaskRepository extends JpaRepository<Task, Long>, JpaSpecificationExecutor<Task> {
 
     @Query("select (count(t) > 0) from Task t where t.assignee.id = ?1 and t.id = ?2")
     boolean existsByAssignee_IdAndId(Long assignee, Long task);

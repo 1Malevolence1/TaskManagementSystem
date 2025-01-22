@@ -2,6 +2,9 @@ package com.example.TaskManagementSystem.task.serivce;
 
 import com.example.TaskManagementSystem.account.AccountValidate;
 import com.example.TaskManagementSystem.task.dto.*;
+import com.example.TaskManagementSystem.task.model.Priority;
+import com.example.TaskManagementSystem.task.model.Status;
+import com.example.TaskManagementSystem.task.repostory.TaskSpecification;
 import com.example.TaskManagementSystem.utils.exception.Error;
 import com.example.TaskManagementSystem.utils.exception.PersistenceException;
 import com.example.TaskManagementSystem.task.mapper.TaskMapperManager;
@@ -11,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +30,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository repository;
     private final TaskMapperManager mapper;
     private final TaskValidate taskValidate;
+    private final TaskSpecification taskSpecification;
     private final AccountValidate accountValidate;
 
 
@@ -103,10 +108,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskResponseDto> getAllTasksById(Long accountId) {
-        accountValidate.validateAccountExists(accountId);
-        List<Task> list = repository.findTasksByAccountId(accountId);
-        log.info("{}", list);
-        return mapper.toDtoList(list);
+    public List<TaskResponseDto> getAllTasksById(Long accountId, Status status, Priority priority) {
+
+        Specification<Task> spec = Specification
+                .where(taskSpecification.hasAccount(accountId))
+                .and(taskSpecification.hasStatus(status))
+                .and(taskSpecification.hasPriority(priority));
+
+
+         return mapper.toDtoList(
+                 repository.findAll(spec)
+         );
     }
 }

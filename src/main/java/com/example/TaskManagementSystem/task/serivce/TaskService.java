@@ -1,6 +1,8 @@
 package com.example.TaskManagementSystem.task.serivce;
 
 import com.example.TaskManagementSystem.task.dto.*;
+import com.example.TaskManagementSystem.task.model.Priority;
+import com.example.TaskManagementSystem.task.model.Status;
 
 import java.util.List;
 
@@ -13,5 +15,5 @@ public interface TaskService {
     TaskResponseDto get(Long id);
     boolean exist(Long taskId);
 
-    List<TaskResponseDto> getAllTasksById(Long accountId);
+    List<TaskResponseDto> getAllTasksById(Long accountId, Status status, Priority priority);
 }
