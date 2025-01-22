@@ -1,8 +1,9 @@
 package com.example.TaskManagementSystem.task.serivce;
 
+import com.example.TaskManagementSystem.task.dto.TaskAdminUpdateRequestDto;
 import com.example.TaskManagementSystem.task.dto.TaskCreateRequestDto;
 import com.example.TaskManagementSystem.task.dto.TaskResponseDto;
-import com.example.TaskManagementSystem.task.dto.TaskUpdateRequestDto;
+import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
 import com.example.TaskManagementSystem.utils.exception.Error;
 import com.example.TaskManagementSystem.utils.exception.PersistenceException;
 import com.example.TaskManagementSystem.task.mapper.TaskMapperManager;
@@ -41,19 +42,39 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void update(TaskUpdateRequestDto dto) {
+    public void update(TaskAdminUpdateRequestDto dto, Long authorId) {
+        taskValidate.validate(dto, authorId);
+        Task mapperTask = mapper.toModel(dto);
         try {
             repository.findById(dto.id()).ifPresentOrElse(
                     task -> {
-                        if (dto.title() != null) task.setTitle(dto.title());
-                        if (dto.description() != null) task.setDescription(dto.description());
-                        if (dto.status() != null) task.setStatus(dto.status());
-                        if (dto.priority() != null) task.setPriority(dto.priority());
+                        if (dto.title() != null) task.setTitle(mapperTask.getTitle());
+                        if (dto.description() != null) task.setDescription(mapperTask.getDescription());
+                        if (dto.status() != null) task.setStatus(mapperTask.getStatus());
+                        if (dto.priority() != null) task.setPriority(mapperTask.getPriority());
                     }, () -> {
                         throw new NoSuchElementException("Not found task by ID::%d".formatted(dto.id()));
                     }
             );
-        }catch (DataAccessException e) {
+        } catch (DataAccessException e) {
+            throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных"), e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void update(TaskUserUpdateRequestDto dto) {
+        taskValidate.validate(dto);
+        Task mapperTask = mapper.toModel(dto);
+        try {
+            repository.findById(dto.id()).ifPresentOrElse(
+                    task -> {
+                        task.setStatus(mapperTask.getStatus());
+                    }, () -> {
+                        throw new NoSuchElementException("Not found task by ID::%d".formatted(dto.id()));
+                    }
+            );
+        } catch (DataAccessException e) {
             throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных"), e);
         }
     }
@@ -65,9 +86,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponseDto get(Long id) {
-      Task task =   repository.findById(id).orElseThrow(() -> new NoSuchElementException("Not found task by ID::%d".formatted(id)));
-      log.info("{}", task.toString());
-      return mapper.toDto(task);
+        Task task = repository.findById(id).orElseThrow(() -> new NoSuchElementException("Not found task by ID::%d".formatted(id)));
+        log.info("{}", task.toString());
+        return mapper.toDto(task);
 
     }
 }

@@ -1,12 +1,12 @@
 package com.example.TaskManagementSystem.task.mapper;
 
 import com.example.TaskManagementSystem.account.mapper.AccountMapper;
-import com.example.TaskManagementSystem.comment.dto.CommentResponseDto;
-import com.example.TaskManagementSystem.comment.model.Comment;
+import com.example.TaskManagementSystem.task.dto.TaskAdminUpdateRequestDto;
 import com.example.TaskManagementSystem.task.dto.TaskCreateRequestDto;
 import com.example.TaskManagementSystem.task.dto.TaskResponseDto;
-import com.example.TaskManagementSystem.task.dto.TaskUpdateRequestDto;
 import com.example.TaskManagementSystem.task.model.Task;
+import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -20,12 +20,16 @@ public interface TaskMapper {
 
     TaskCreateRequestDto toTaskCreateRequestDto(Task task);
 
-    Task toEntity(TaskUpdateRequestDto taskUpdateRequestDto);
+    Task toEntity(TaskAdminUpdateRequestDto taskAdminUpdateRequestDto);
 
-    TaskUpdateRequestDto toTaskUpdateRequestDto(Task task);
+    TaskAdminUpdateRequestDto toTaskUpdateRequestDto(Task task);
 
 
     TaskResponseDto toTaskResponseDto(Task task);
 
 
+    Task toEntity(TaskUserUpdateRequestDto taskUserUpdateRequestDto);
+
+    @InheritInverseConfiguration(name = "toEntity")
+    TaskUserUpdateRequestDto toTaskUserUpdateRequestDto(Task task);
 }

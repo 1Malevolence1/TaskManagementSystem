@@ -1,4 +1,4 @@
-package com.example.TaskManagementSystem.task.exceptin;
+package com.example.TaskManagementSystem.task.exception;
 
 
 import com.example.TaskManagementSystem.utils.exception.Error;
@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class SelfAssignmentException extends RuntimeException {
+public class StatusDoesNotHaveMatchingType extends RuntimeException{
+
     private final Error error;
 }

@@ -1,4 +1,4 @@
-package com.example.TaskManagementSystem.task.exceptin;
+package com.example.TaskManagementSystem.task.exception;
 
 import com.example.TaskManagementSystem.utils.exception.Error;
 import com.example.TaskManagementSystem.utils.exception.ErrorProblemDetails;
@@ -24,6 +24,19 @@ public class GlobalExceptionAssociatedWithTheTask {
     public ResponseEntity<PersistenceException> handlerTaskPersistenceException(PersistenceException e){
         return ResponseEntity.badRequest().body(e);
     }
+
+
+    @ExceptionHandler(StatusDoesNotHaveMatchingType.class)
+    public ResponseEntity<Error> handlerStatusDoesNotHaveMatchingType(StatusDoesNotHaveMatchingType e){
+        return ResponseEntity.badRequest().body(e.getError());
+    }
+
+    @ExceptionHandler(PriorityDoesNotHaveMatchingType.class)
+    public ResponseEntity<Error> handlerPriorityDoesNotHaveMatchingType( PriorityDoesNotHaveMatchingType e){
+        return ResponseEntity.badRequest().body(e.getError());
+    }
+
+
 
 
     @ExceptionHandler(BindException.class)

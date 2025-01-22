@@ -43,11 +43,11 @@ public class CommentRestController {
     }
 
 
-    // Добавить проверку на то, что задача есть
+
     @GetMapping("")
     public ResponseEntity<List<CommentResponseDto>> getCommentsForTask(@RequestParam(name = "taskId") Long id){
         log.info("start method getAllCommentByTaskId. taskID: {}", id);
-       List<CommentResponseDto> dto =  commentService.getAllByTaskId(id);
+        List<CommentResponseDto> dto =  commentService.getAllByTaskId(id);
         log.info("methode complete");
         return ResponseEntity.ok(dto);
     }
