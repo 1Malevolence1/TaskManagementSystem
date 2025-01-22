@@ -4,9 +4,12 @@ import com.example.TaskManagementSystem.account.dto.AccountCreateRequestDto;
 import com.example.TaskManagementSystem.account.dto.AccountRegistrationRequestDto;
 import com.example.TaskManagementSystem.account.dto.AccountResponseDto;
 import com.example.TaskManagementSystem.account.mapper.AccountMapperManager;
+import com.example.TaskManagementSystem.account.model.Account;
 import com.example.TaskManagementSystem.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -44,5 +47,10 @@ public class AccountServiceImpl implements AccountService {
                 repository.findById(id).orElseThrow(() ->
                         new NoSuchElementException("Not found account with ID::%d".formatted(id)))
         );
+    }
+
+    @Override
+    public Account getUserByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Not found account with email::%s".formatted(email)));
     }
 }

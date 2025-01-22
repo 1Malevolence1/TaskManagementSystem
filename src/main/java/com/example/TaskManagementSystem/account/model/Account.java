@@ -5,7 +5,11 @@ import com.example.TaskManagementSystem.comment.model.Comment;
 import com.example.TaskManagementSystem.task.model.Task;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -16,7 +20,7 @@ import java.util.List;
 @Builder
 @Setter
 @Getter
-public class Account {
+public class Account implements UserDetails {
 
 
     @Id
@@ -30,7 +34,6 @@ public class Account {
     @Column(name = "account_password", nullable = false)
     private String password;
 
-
     @OneToOne()
     @JoinColumn(name = "role_id")
     private Role role;
@@ -40,4 +43,14 @@ public class Account {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.getName()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }

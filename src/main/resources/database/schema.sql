@@ -1,3 +1,4 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 create table if not exists public.account_role(
     role_id serial primary key,
@@ -6,7 +7,7 @@ create table if not exists public.account_role(
 
 create table if not exists public.account(
         account_id serial primary key,
-        account_emial varchar(100) not null,
+        account_email varchar(100) not null,
         account_password text,
         role_id int,
 

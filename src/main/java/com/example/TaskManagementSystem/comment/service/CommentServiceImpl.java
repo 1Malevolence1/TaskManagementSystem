@@ -27,8 +27,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentValidate commentValidate;
 
     @Override
-    public void create(CommentCreateRequestDto dto) {
-        commentValidate.validate(dto.taskId(), dto.accountId(), null);
+    public void create(CommentCreateRequestDto dto, String token) {
+        commentValidate.validate(dto.taskId(), dto.accountId(), token);
          try {
              repository.save(
                      mapper.toModel(
@@ -41,7 +41,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id, String token) {
+        commentValidate.validate(id, token);
         repository.deleteById(id);
     }
 
