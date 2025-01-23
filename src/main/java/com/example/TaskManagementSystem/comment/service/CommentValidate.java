@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class CommentValidate {
 
     private final TaskValidate taskValidate;
-    private final JwtService jwtService;
+
     private final AccountValidate accountValidate;
     private final CommentAccountValidator commentAccountValidator;
     private final TaskOwnershipValidator taskOwnershipValidator;

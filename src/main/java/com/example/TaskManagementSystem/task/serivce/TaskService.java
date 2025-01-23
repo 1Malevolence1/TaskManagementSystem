@@ -15,6 +15,5 @@ public interface TaskService {
     void delete(Long id);
     TaskResponseDto get(Long id);
     boolean exist(Long taskId);
-
     Page<TaskResponseDto> getAllTasks(Long accountId, Status status, Priority priority, int size, int page);
 }

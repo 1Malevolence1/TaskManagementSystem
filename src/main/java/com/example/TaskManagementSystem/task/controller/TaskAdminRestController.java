@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +52,7 @@ public class TaskAdminRestController {
             )
             @Valid @RequestBody TaskCreateRequestDto dto,
             BindingResult bindingResult,
-            @AuthenticationPrincipal Account userDetails) throws BindException {
+            @AuthenticationPrincipal Account userDetails)  {
         log.info("start method by add Task. Dto: {}", dto);
         bindingResultValidate.check(bindingResult);
         taskService.create(dto, userDetails.getId());

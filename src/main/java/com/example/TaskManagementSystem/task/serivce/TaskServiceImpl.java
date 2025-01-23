@@ -44,7 +44,9 @@ public class TaskServiceImpl implements TaskService {
         taskValidate.validate(dto, authorId);
         try {
             Task task = mapper.toModel(dto);
-            if(task.getAssignee().getId() == null) task.setAssignee(null);
+            if (task.getAssignee() != null && task.getAssignee().getId() == null) {
+                task.setAssignee(null);
+            }
             task.setAuthor(Account.builder().id(authorId).build());
             repository.save(task);
         } catch (DataAccessException e) {
@@ -132,4 +134,6 @@ public class TaskServiceImpl implements TaskService {
 
          return taskPage.map(mapper::toDto);
     }
+
+
 }
