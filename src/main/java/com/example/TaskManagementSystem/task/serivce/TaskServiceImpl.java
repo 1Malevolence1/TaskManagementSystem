@@ -1,17 +1,15 @@
 package com.example.TaskManagementSystem.task.serivce;
 
 import com.example.TaskManagementSystem.account.model.Account;
-import com.example.TaskManagementSystem.account.utils.AccountValidate;
 import com.example.TaskManagementSystem.task.dto.*;
+import com.example.TaskManagementSystem.task.mapper.TaskMapperManager;
 import com.example.TaskManagementSystem.task.model.Priority;
 import com.example.TaskManagementSystem.task.model.Status;
+import com.example.TaskManagementSystem.task.model.Task;
+import com.example.TaskManagementSystem.task.repostory.TaskRepository;
 import com.example.TaskManagementSystem.task.repostory.TaskSpecification;
 import com.example.TaskManagementSystem.utils.exception.Error;
 import com.example.TaskManagementSystem.utils.exception.PersistenceException;
-import com.example.TaskManagementSystem.task.mapper.TaskMapperManager;
-import com.example.TaskManagementSystem.task.model.Task;
-import com.example.TaskManagementSystem.task.repostory.TaskRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

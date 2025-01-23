@@ -2,7 +2,6 @@ package com.example.TaskManagementSystem.comment.service;
 
 
 import com.example.TaskManagementSystem.account.utils.AccountValidate;
-import com.example.TaskManagementSystem.security.jwt.JwtService;
 import com.example.TaskManagementSystem.task.serivce.TaskOwnershipValidator;
 import com.example.TaskManagementSystem.task.serivce.TaskValidate;
 import lombok.RequiredArgsConstructor;

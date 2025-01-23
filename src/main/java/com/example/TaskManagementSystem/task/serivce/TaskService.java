@@ -5,8 +5,6 @@ import com.example.TaskManagementSystem.task.model.Priority;
 import com.example.TaskManagementSystem.task.model.Status;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface TaskService {
     void create(TaskCreateRequestDto dto, Long authorId);
     void update(TaskAdminUpdateRequestDto dto,  Long authorId);
