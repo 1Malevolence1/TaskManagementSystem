@@ -1,11 +1,10 @@
 package com.example.TaskManagementSystem.task.controller;
 
-import com.example.TaskManagementSystem.security.jwt.JwtService;
+import com.example.TaskManagementSystem.account.model.Account;
 import com.example.TaskManagementSystem.task.dto.TaskAdminUpdateRequestDto;
 import com.example.TaskManagementSystem.task.dto.TaskCreateRequestDto;
 import com.example.TaskManagementSystem.task.serivce.TaskService;
 import com.example.TaskManagementSystem.utils.BindingResultValidate;
-import com.example.TaskManagementSystem.utils.RequestHeaderManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,12 +18,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/task")
+@RequestMapping("api/admin/tasks")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Управление задачами (Админ)", description = "API для управления задачами. Доступно только для ADMIN.")
@@ -33,8 +33,6 @@ public class TaskAdminRestController {
 
     private final TaskService taskService;
     private final BindingResultValidate bindingResultValidate;
-    private final JwtService jwtService;
-
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(
@@ -46,7 +44,7 @@ public class TaskAdminRestController {
             @ApiResponse(responseCode = "400", description = "Некорректные входные данные", content = @Content),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён. Требуется роль ADMIN.", content = @Content)
     })
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<Void> addTask(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Данные для создания задачи",
@@ -55,16 +53,13 @@ public class TaskAdminRestController {
             )
             @Valid @RequestBody TaskCreateRequestDto dto,
             BindingResult bindingResult,
-            @Parameter(hidden = true) @RequestHeader("Authorization") String authorizationHeader) throws BindException {
+            @AuthenticationPrincipal Account userDetails) throws BindException {
         log.info("start method by add Task. Dto: {}", dto);
-
         bindingResultValidate.check(bindingResult);
-        taskService.create(dto, jwtService.extractUserId(RequestHeaderManager.extractTokenFromHeader(authorizationHeader)));
-
-        log.info("task add");
+        taskService.create(dto, userDetails.getId());
+        log.info("task  add");
         return ResponseEntity.noContent().build();
     }
-
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(
@@ -76,7 +71,7 @@ public class TaskAdminRestController {
             @ApiResponse(responseCode = "400", description = "Некорректные входные данные", content = @Content),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён. Требуется роль ADMIN.", content = @Content)
     })
-    @PutMapping("/admin/update")
+    @PutMapping("/update")
     public ResponseEntity<Void> updateAdminTask(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Данные для обновления задачи",
@@ -84,13 +79,12 @@ public class TaskAdminRestController {
                     content = @Content(schema = @Schema(implementation = TaskAdminUpdateRequestDto.class))
             )
             @RequestBody TaskAdminUpdateRequestDto dto,
-            @Parameter(hidden = true) @RequestHeader("Authorization") String authorizationHeader) {
+            @AuthenticationPrincipal Account userDetails) {
         log.info("start method by updateAdminTask Task. Dto: {}", dto);
-        taskService.update(dto, jwtService.extractUserId(RequestHeaderManager.extractTokenFromHeader(authorizationHeader)));
+        taskService.update(dto, userDetails.getId());
         log.info("task update");
         return ResponseEntity.noContent().build();
     }
-
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(
@@ -102,8 +96,7 @@ public class TaskAdminRestController {
             @ApiResponse(responseCode = "404", description = "Задача не найдена", content = @Content),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён. Требуется роль ADMIN.", content = @Content)
     })
-
-    @DeleteMapping("/{taskId:\\d+}/delete")
+    @DeleteMapping("/{taskId}/delete")
     public ResponseEntity<Void> deleteTask(
             @Parameter(description = "ID задачи для удаления", required = true, example = "1")
             @PathVariable(name = "taskId") Long id) {

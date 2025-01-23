@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    void create(CommentCreateRequestDto dto, String token);
-    void delete(Long id, String token);
+    void create(CommentCreateRequestDto dto, Long accountId, String role);
+    void delete(Long id, Long accountId);
     List<CommentResponseDto> getAllByTaskId(Long taskId);
 }

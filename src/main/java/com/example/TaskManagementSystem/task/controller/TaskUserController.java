@@ -1,13 +1,13 @@
 package com.example.TaskManagementSystem.task.controller;
 
-import com.example.TaskManagementSystem.security.jwt.JwtService;
+import com.example.TaskManagementSystem.account.model.Account;
+import com.example.TaskManagementSystem.security.CustomerAccountDetailService;
 import com.example.TaskManagementSystem.task.dto.TaskResponseDto;
 import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
 import com.example.TaskManagementSystem.task.model.Priority;
 import com.example.TaskManagementSystem.task.model.Status;
 import com.example.TaskManagementSystem.task.serivce.TaskService;
 import com.example.TaskManagementSystem.utils.BindingResultValidate;
-import com.example.TaskManagementSystem.utils.RequestHeaderManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,20 +22,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/task")
+@RequestMapping("api/user/tasks")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Управление задачами", description = "API для управления задачами")
-@SecurityRequirement(name = "JWT") // Указываем, что требуется JWT-аутентификация
-public class TaskController {
+@Tag(name = "Управление задачами пользователя", description = "API для управления задачами аутентифицированных пользователей")
+@SecurityRequirement(name = "JWT")
+public class TaskUserController {
 
-    private final TaskService taskService;
-    private final JwtService jwtService;
+
     private final BindingResultValidate bindingResultValidate;
+    private final TaskService taskService;
 
     @PreAuthorize("isAuthenticated()")
     @Operation(
@@ -56,8 +57,7 @@ public class TaskController {
         return ResponseEntity.ok(taskService.get(id));
     }
 
-
-
+    @PreAuthorize("isAuthenticated()")
     @Operation(
             summary = "Обновить задачу",
             description = "Обновляет данные задачи. Требуется JWT-аутентификация."
@@ -67,9 +67,7 @@ public class TaskController {
             @ApiResponse(responseCode = "400", description = "Некорректные входные данные", content = @Content),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён. Требуется авторизация.", content = @Content)
     })
-
-    @PreAuthorize("isAuthenticated()")
-    @PutMapping("/account/update")
+    @PutMapping("/update")
     public ResponseEntity<Void> updateUserTask(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Данные для обновления задачи",
@@ -78,15 +76,11 @@ public class TaskController {
             )
             @Valid @RequestBody TaskUserUpdateRequestDto dto,
             BindingResult bindingResult,
-            @Parameter(hidden = true) @RequestHeader("Authorization") String token
-            ) {
+            @AuthenticationPrincipal Account userDetails) {
         log.info("start method updateUserTask. Dto: {}", dto);
-
         bindingResultValidate.check(bindingResult);
-        taskService.update(dto, jwtService.extractUserId(RequestHeaderManager.extractTokenFromHeader(token)));
-
+        taskService.update(dto, userDetails.getId());
         log.info("task update");
-
         return ResponseEntity.noContent().build();
     }
 
@@ -101,8 +95,8 @@ public class TaskController {
             }),
             @ApiResponse(responseCode = "403", description = "Доступ запрещён. Требуется авторизация.", content = @Content)
     })
-    @GetMapping("/get/all")
-    public ResponseEntity<Page<TaskResponseDto>> getFilterTakes(
+    @GetMapping("/filter")
+    public ResponseEntity<Page<TaskResponseDto>> getFilteredTasks(
             @Parameter(description = "ID аккаунта для фильтрации")
             @RequestParam(name = "accountId", required = false) Long id,
 
@@ -117,7 +111,6 @@ public class TaskController {
 
             @Parameter(description = "Номер страницы", example = "0")
             @RequestParam(name = "page", defaultValue = "0") Integer page) {
-
         return ResponseEntity.ok(taskService.getAllTasks(id, status, priority, size, page));
     }
 }

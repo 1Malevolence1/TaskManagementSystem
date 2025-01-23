@@ -30,8 +30,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentValidate commentValidate;
 
     @Override
-    public void create(CommentCreateRequestDto dto, String token) {
-      Long accountId = commentValidate.validateForCreate(dto.taskId(), token);
+    public void create(CommentCreateRequestDto dto, Long accountId, String role) {
+      commentValidate.validateForCreate(dto.taskId(),accountId,role);
          try {
              Comment comment = mapper.toModel(dto);
              comment.setAccount(Account.builder().id(accountId).build());
@@ -42,8 +42,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void delete(Long id, String token) {
-        commentValidate.validate(id, token);
+    public void delete(Long id, Long accountId) {
+        commentValidate.validate(id, accountId);
         repository.deleteById(id);
     }
 

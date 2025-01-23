@@ -1,10 +1,10 @@
 package com.example.TaskManagementSystem.comment.controller;
 
+import com.example.TaskManagementSystem.account.model.Account;
 import com.example.TaskManagementSystem.comment.dto.CommentCreateRequestDto;
 import com.example.TaskManagementSystem.comment.dto.CommentResponseDto;
 import com.example.TaskManagementSystem.comment.service.CommentService;
 import com.example.TaskManagementSystem.utils.BindingResultValidate;
-import com.example.TaskManagementSystem.utils.RequestHeaderManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,14 +56,16 @@ public class CommentRestController {
             @Valid @RequestBody CommentCreateRequestDto dto,
             BindingResult bindingResult,
 
-            @Parameter(hidden = true)
-            @RequestHeader("Authorization") String authorizationHeader) {
+
+            @AuthenticationPrincipal Account userDetails) {
         log.info("start method by create Comment. Dto: {}", dto);
 
         bindingResultValidate.check(bindingResult);
         commentService.create(
                 dto,
-                RequestHeaderManager.extractTokenFromHeader(authorizationHeader));
+                userDetails.getId(),
+                userDetails.getRole().getName()
+        );
 
         log.info("comment create");
         log.info("method complete");
@@ -85,11 +88,10 @@ public class CommentRestController {
             @Parameter(description = "ID комментария для удаления", required = true, example = "1")
             @PathVariable(name = "commentId") Long id,
             @Parameter(hidden = true)
-            @RequestHeader("Authorization") String authorizationHeader) {
+            @AuthenticationPrincipal Account userDetails) {
         log.info("start method by delete Comment. ID: {}", id);
         commentService.delete(
-                id,
-                RequestHeaderManager.extractTokenFromHeader(authorizationHeader));
+                id, userDetails.getId());
         log.info("comment delete");
         log.info("method complete");
         return ResponseEntity.noContent().build();
