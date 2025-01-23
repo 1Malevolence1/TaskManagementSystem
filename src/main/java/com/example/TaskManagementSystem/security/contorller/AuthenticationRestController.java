@@ -2,10 +2,13 @@ package com.example.TaskManagementSystem.security.contorller;
 
 
 
+import com.example.TaskManagementSystem.account.dto.AccountCreateRequestDto;
 import com.example.TaskManagementSystem.security.authentication.AuthenticationService;
 import com.example.TaskManagementSystem.security.authentication.SingInRequestDto;
+import com.example.TaskManagementSystem.security.authentication.SingUpRequestDto;
 import com.example.TaskManagementSystem.security.jwt.JwtTokenReceivingThroughRefreshTokenResponseDto;
 import com.example.TaskManagementSystem.security.jwt.JwtTokenSingInResponseDto;
+import com.example.TaskManagementSystem.utils.BindingResultValidate;
 import com.example.TaskManagementSystem.utils.exception.Error;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,8 +16,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationRestController {
 
     private final AuthenticationService authenticationService;
-
+    private final BindingResultValidate bindingResultValidate;
     @Operation(
             summary = "Аутентификация пользователя",
             description = "Метод для аутентификации пользователя и получения JWT токенов (access и refresh)"
@@ -35,9 +40,11 @@ public class AuthenticationRestController {
             @ApiResponse(responseCode = "403", description = "Неверное имя пользователя или пароль", content = @Content(schema = @Schema(implementation = Error.class)))
     })
     @PostMapping("/singIn")
-    public ResponseEntity<JwtTokenSingInResponseDto> singIn(@RequestBody SingInRequestDto dto) {
+    public ResponseEntity<JwtTokenSingInResponseDto> singIn(@Valid @RequestBody SingInRequestDto dto, BindingResult bindingResult) {
+        bindingResultValidate.check(bindingResult);
         return ResponseEntity.ok(authenticationService.authenticate(dto));
     }
+
 
     @Operation(
             summary = "Обновление access токена",

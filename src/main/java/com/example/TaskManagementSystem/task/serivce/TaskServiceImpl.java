@@ -1,6 +1,6 @@
 package com.example.TaskManagementSystem.task.serivce;
 
-import com.example.TaskManagementSystem.account.AccountValidate;
+import com.example.TaskManagementSystem.account.utils.AccountValidate;
 import com.example.TaskManagementSystem.task.dto.*;
 import com.example.TaskManagementSystem.task.model.Priority;
 import com.example.TaskManagementSystem.task.model.Status;
@@ -111,10 +111,10 @@ public class TaskServiceImpl implements TaskService {
 
 
 
-    public Page<TaskResponseDto> getAllTasksById(Long accountId, Status status, Priority priority, int size, int page) {
+    @Override
+    public Page<TaskResponseDto> getAllTasks(Long accountId, Status status, Priority priority, int size, int page) {
 
         Pageable pageable = PageRequest.of(page, size);
-
         Specification<Task> spec = Specification
                 .where(taskSpecification.hasAccount(accountId))
                 .and(taskSpecification.hasStatus(status))

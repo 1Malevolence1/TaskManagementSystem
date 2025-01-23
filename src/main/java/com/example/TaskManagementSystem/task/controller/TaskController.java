@@ -15,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("api/task")
 @RequiredArgsConstructor
@@ -48,14 +46,12 @@ public class TaskController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<Page<TaskResponseDto>> getTaskById(
+    public ResponseEntity<Page<TaskResponseDto>> getFilterTakes(
             @RequestParam(name = "accountId", required = false) Long id,
             @RequestParam(name = "status", required = false) Status status,
             @RequestParam(name = "priority", required = false)Priority priority,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "page", defaultValue = "1") Integer page){
-
-
-        return ResponseEntity.ok(taskService.getAllTasksById(id, status, priority, size, page));
+        return ResponseEntity.ok(taskService.getAllTasks(id, status, priority, size, page));
     }
 }

@@ -14,6 +14,6 @@ public class TaskExistValidate {
     private final TaskRepository taskRepository;
 
     public void checkTaskExistence(Long taskId){
-        if(taskRepository.existsById(taskId)) throw  new NoSuchElementException("Not found task with ID::%d".formatted(taskId));
+        if(!taskRepository.existsById(taskId)) throw  new NoSuchElementException("Not found task with ID::%d".formatted(taskId));
     }
 }

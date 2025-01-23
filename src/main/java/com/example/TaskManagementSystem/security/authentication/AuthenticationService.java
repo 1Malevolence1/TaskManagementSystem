@@ -2,11 +2,11 @@ package com.example.TaskManagementSystem.security.authentication;
 
 
 
+import com.example.TaskManagementSystem.account.dto.AccountCreateRequestDto;
 import com.example.TaskManagementSystem.account.model.Account;
 import com.example.TaskManagementSystem.security.jwt.JwtTokenReceivingThroughRefreshTokenResponseDto;
 import com.example.TaskManagementSystem.security.jwt.JwtTokenSingInResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +18,7 @@ public class AuthenticationService {
     private final AuthenticationSingInDateValidator authenticationSingInDateValidator;
     private final AuthenticationSingInProcessor authenticationSingInProcessor;
     private final AuthenticationRefreshTokenProcessor authenticationRefreshTokenProcessor;
+
 
     public JwtTokenSingInResponseDto authenticate(SingInRequestDto dto) {
         authenticationSingInDateValidator.validate(dto);

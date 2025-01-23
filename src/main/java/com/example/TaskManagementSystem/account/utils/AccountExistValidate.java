@@ -1,4 +1,4 @@
-package com.example.TaskManagementSystem.account;
+package com.example.TaskManagementSystem.account.utils;
 
 import com.example.TaskManagementSystem.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,6 @@ public class AccountExistValidate {
     private final AccountService accountService;
 
     public void validateExistsAccountById(Long accountId){
-        if(!accountService.exits(accountId)) throw  new NoSuchElementException("Not found account with ID::%d".formatted(accountId));
+        if(!accountService.exitsById(accountId)) throw  new NoSuchElementException("Not found account with ID::%d".formatted(accountId));
     }
 }

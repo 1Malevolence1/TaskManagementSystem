@@ -1,15 +1,18 @@
 package com.example.TaskManagementSystem.account.service;
 
 import com.example.TaskManagementSystem.account.dto.AccountCreateRequestDto;
-import com.example.TaskManagementSystem.account.dto.AccountRegistrationRequestDto;
 import com.example.TaskManagementSystem.account.dto.AccountResponseDto;
 import com.example.TaskManagementSystem.account.mapper.AccountMapperManager;
 import com.example.TaskManagementSystem.account.model.Account;
+import com.example.TaskManagementSystem.account.model.Role;
 import com.example.TaskManagementSystem.account.repository.AccountRepository;
+import com.example.TaskManagementSystem.security.exception.AccountAlreadyRegistered;
+import com.example.TaskManagementSystem.utils.exception.Error;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -23,22 +26,29 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountMapperManager mapper;
     private final AccountRepository repository;
+    private final PasswordEncoder passwordEncoder;
+
+    private final AccountGetTypeRole accountGetTypeRole;
 
     @Override
-    public void create(AccountRegistrationRequestDto dto) {
-
-    }
-
-    @Override
+    @Transactional
     public void create(AccountCreateRequestDto dto) {
-        repository.save(
-                mapper.toModel(dto)
-        );
+        Role role = accountGetTypeRole.getRole(dto.getRole());
+        if(exitsByEmail(dto.getEmail())) throw new AccountAlreadyRegistered(new Error("Account with this email already exists"));
+        Account account = mapper.toModel(dto);
+        account.setRole(role);
+        account.setPassword(passwordEncoder.encode(dto.getPassword()));
+        repository.save(account);
     }
 
     @Override
-    public boolean exits(Long accountId) {
+    public boolean exitsById(Long accountId) {
         return repository.existsById(accountId);
+    }
+
+    @Override
+    public boolean exitsByEmail(String email) {
+        return repository.existsByEmail(email);
     }
 
     @Override

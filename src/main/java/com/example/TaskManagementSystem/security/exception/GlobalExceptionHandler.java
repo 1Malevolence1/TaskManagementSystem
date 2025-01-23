@@ -21,6 +21,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getError());
     }
 
+    @ExceptionHandler(AccountAlreadyRegistered.class)
+    public ResponseEntity<Error> handleAccountAlreadyRegistered(AccountAlreadyRegistered ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getError());
+    }
+
     @ExceptionHandler(BadRequestSingInCustomer.class)
     public ResponseEntity<Error> handleBadRequestSingInCustomer(BadRequestSingInCustomer ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getError());

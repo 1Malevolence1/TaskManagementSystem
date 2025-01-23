@@ -1,4 +1,4 @@
-package com.example.TaskManagementSystem.account;
+package com.example.TaskManagementSystem.account.utils;
 
 
 import lombok.RequiredArgsConstructor;

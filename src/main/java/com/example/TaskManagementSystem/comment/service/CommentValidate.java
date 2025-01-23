@@ -1,20 +1,12 @@
 package com.example.TaskManagementSystem.comment.service;
 
 
-import com.example.TaskManagementSystem.account.AccountValidate;
+import com.example.TaskManagementSystem.account.utils.AccountValidate;
 import com.example.TaskManagementSystem.security.jwt.JwtService;
-import com.example.TaskManagementSystem.task.dto.TaskIdsDto;
-import com.example.TaskManagementSystem.task.exception.AssigneeDoesNotBelongTask;
-import com.example.TaskManagementSystem.task.exception.AuthorDoesNotBelongTask;
 import com.example.TaskManagementSystem.task.serivce.TaskOwnershipValidator;
-import com.example.TaskManagementSystem.task.serivce.TaskService;
 import com.example.TaskManagementSystem.task.serivce.TaskValidate;
-import com.example.TaskManagementSystem.utils.exception.Error;
-import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor

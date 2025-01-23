@@ -16,5 +16,5 @@ public interface TaskService {
     TaskResponseDto get(Long id);
     boolean exist(Long taskId);
 
-    Page<TaskResponseDto> getAllTasksById(Long accountId, Status status, Priority priority, int size, int page);
+    Page<TaskResponseDto> getAllTasks(Long accountId, Status status, Priority priority, int size, int page);
 }

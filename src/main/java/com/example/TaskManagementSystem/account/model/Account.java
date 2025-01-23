@@ -58,4 +58,10 @@ public class Account implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "role = " + role + ")";
+    }
 }
