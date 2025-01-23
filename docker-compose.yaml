@@ -9,3 +9,15 @@ services:
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: taskManagementSystem
 
+  service:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/taskManagementSystem
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: 123
+    ports:
+      - "8090:8090"
+    depends_on:
+      - database
