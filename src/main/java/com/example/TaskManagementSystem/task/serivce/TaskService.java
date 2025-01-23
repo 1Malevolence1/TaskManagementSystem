@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface TaskService {
-    void create(TaskCreateRequestDto dto);
+    void create(TaskCreateRequestDto dto, Long authorId);
     void update(TaskAdminUpdateRequestDto dto,  Long authorId);
     void update(TaskUserUpdateRequestDto dto, Long assigneeId);
     TaskIdsDto getIdsAccount(Long taskId);

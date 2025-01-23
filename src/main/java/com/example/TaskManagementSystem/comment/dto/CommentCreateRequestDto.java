@@ -10,7 +10,5 @@ public record CommentCreateRequestDto(
         @NotEmpty
         String text,
         @NotNull
-        Long taskId,
-        @NotNull
-        Long accountId) {
+        Long taskId) {
 }

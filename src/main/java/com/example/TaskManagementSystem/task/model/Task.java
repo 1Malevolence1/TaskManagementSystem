@@ -38,29 +38,19 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                ", priority=" + priority +
-                ", author=" + author +
-                ", assignee=" + assignee +
-                ", comments=" + comments +
-                '}';
-    }
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
+    @ToString.Exclude
     private Account author;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_id", nullable = false)
-
+    @JoinColumn(name = "assignee_id")
+    @ToString.Exclude
     private Account assignee;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Comment> comments;
 }

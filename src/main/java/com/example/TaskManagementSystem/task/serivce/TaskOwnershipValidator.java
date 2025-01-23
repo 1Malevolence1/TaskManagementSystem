@@ -21,14 +21,11 @@ public class TaskOwnershipValidator {
     public void validateTaskOwnership(Long taskId, Long accountId, String role) {
         TaskIdsDto ids = taskService.getIdsAccount(taskId);
         if (role.equals("ROLE_USER")) {
-
             if (!Objects.equals(ids.assigneeId(), accountId)) {
                 throw new AssigneeDoesNotBelongTask(new Error(
-                        "Задача с ID:: %d не принадлежит исполнителю с ID:: %d".formatted(taskId, accountId)
+                        "Задача с ID::%d не принадлежит исполнителю с ID::%d".formatted(taskId, accountId)
                 ));
             }
-        } else {
-            throw new IllegalArgumentException("Неизвестная роль: " + role);
         }
     }
 }

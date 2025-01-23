@@ -20,7 +20,7 @@ create table if not exists public.task(
      description text not null,
      status varchar(50) not null check (status in ('WAITING', 'IN_PROGRESS', 'COMPLETED')),
      priority varchar(50) not null check (priority in ('HIGH', 'MEDIUM', 'LOW')),
-     author_id integer,
+     author_id integer not null,
      assignee_id integer,
 
      foreign key(author_id) references public.account(account_id),

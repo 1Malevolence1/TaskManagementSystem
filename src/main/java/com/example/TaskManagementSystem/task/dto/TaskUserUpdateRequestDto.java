@@ -1,5 +1,6 @@
 package com.example.TaskManagementSystem.task.dto;
 
+import com.example.TaskManagementSystem.task.model.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,6 +11,6 @@ public record TaskUserUpdateRequestDto(
         @NotNull
         Long id,
 
-        @NotBlank
-        String status) {
+        @NotNull
+        Status status) {
 }

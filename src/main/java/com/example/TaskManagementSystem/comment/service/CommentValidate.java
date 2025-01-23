@@ -18,17 +18,22 @@ public class CommentValidate {
     private final CommentAccountValidator commentAccountValidator;
     private final TaskOwnershipValidator taskOwnershipValidator;
 
-    public void  validate(Long taskId, Long accountId, String token){
-            taskValidate.validateTaskExists(taskId);
-            accountValidate.validateAccountExists(accountId);
-            taskOwnershipValidator.validateTaskOwnership(taskId, accountId,
-                    jwtService.extractRole(token)
-            );
+    public Long validateForCreate(Long taskId, String token) {
+        taskValidate.validateTaskExists(taskId);
+        Long accountId = getAccountId(token);
+        accountValidate.validateAccountExists(accountId);
+        taskOwnershipValidator.validateTaskOwnership(taskId, accountId,
+                jwtService.extractRole(token)
+        );
+        return accountId;
     }
 
 
-    public void  validate(Long commentId , String token){
-            Long accountId = jwtService.extractUserId(token);
-            commentAccountValidator.validate(commentId, accountId);
+    public void validate(Long commentId, String token) {
+        commentAccountValidator.validate(commentId, getAccountId(token));
+    }
+
+    private Long getAccountId(String token) {
+        return jwtService.extractUserId(token);
     }
 }

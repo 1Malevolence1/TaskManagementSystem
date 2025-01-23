@@ -7,6 +7,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class CommentNotHaveAccount extends RuntimeException {
+public class CommentNotBelongAccount extends RuntimeException {
     private final Error error;
 }

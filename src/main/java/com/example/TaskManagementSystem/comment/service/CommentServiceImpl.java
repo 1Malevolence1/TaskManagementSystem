@@ -1,8 +1,10 @@
 package com.example.TaskManagementSystem.comment.service;
 
+import com.example.TaskManagementSystem.account.model.Account;
 import com.example.TaskManagementSystem.comment.dto.CommentCreateRequestDto;
 import com.example.TaskManagementSystem.comment.dto.CommentResponseDto;
 import com.example.TaskManagementSystem.comment.mapper.CommentMapperManager;
+import com.example.TaskManagementSystem.comment.model.Comment;
 import com.example.TaskManagementSystem.comment.repository.CommentRepository;
 import com.example.TaskManagementSystem.task.serivce.TaskValidate;
 import com.example.TaskManagementSystem.utils.exception.Error;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.tokens.CommentToken;
 
 import java.util.List;
 
@@ -28,15 +31,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void create(CommentCreateRequestDto dto, String token) {
-        commentValidate.validate(dto.taskId(), dto.accountId(), token);
+      Long accountId = commentValidate.validateForCreate(dto.taskId(), token);
          try {
-             repository.save(
-                     mapper.toModel(
-                             dto
-                     )
-             );
+             Comment comment = mapper.toModel(dto);
+             comment.setAccount(Account.builder().id(accountId).build());
+             repository.save(comment);
          } catch (DataAccessException e){
-             throw new PersistenceException(new Error(e.getMessage()), e);
+             throw new PersistenceException(new Error(e.getMessage()));
          }
     }
 

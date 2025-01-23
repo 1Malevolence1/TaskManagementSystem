@@ -36,4 +36,9 @@ public class GlobalExceptionAssociatedWithTheComment {
     public ResponseEntity<Error> handlerAuthorDoesNotBelongTask(AuthorDoesNotBelongTask e){
         return ResponseEntity.badRequest().body(e.getError());
     }
+
+    @ExceptionHandler(CommentNotBelongAccount.class)
+    public ResponseEntity<Error> handlerCommentNotHaveAccount(CommentNotBelongAccount e){
+        return ResponseEntity.badRequest().body(e.getError());
+    }
 }

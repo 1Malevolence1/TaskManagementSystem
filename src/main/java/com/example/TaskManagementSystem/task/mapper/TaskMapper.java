@@ -15,7 +15,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", uses = {TaskMapper.class, AccountMapper.class, CommentMapperList.class})
 public interface TaskMapper {
 
-    @Mapping(target = "author.id", source = "authorId")
+
     @Mapping(target = "assignee.id", source = "assigneeId")
     Task toEntity(TaskCreateRequestDto taskCreateRequestDto);
 

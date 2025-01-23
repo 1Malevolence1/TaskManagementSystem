@@ -1,9 +1,12 @@
 package com.example.TaskManagementSystem.task.serivce;
 
 
+import com.example.TaskManagementSystem.account.utils.AccountValidate;
 import com.example.TaskManagementSystem.task.dto.TaskAdminUpdateRequestDto;
 import com.example.TaskManagementSystem.task.dto.TaskCreateRequestDto;
 import com.example.TaskManagementSystem.task.dto.TaskUserUpdateRequestDto;
+import com.example.TaskManagementSystem.task.model.Priority;
+import com.example.TaskManagementSystem.task.model.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,24 +19,41 @@ public class TaskValidate {
     private final TaskExistValidate taskExistValidate;
     private final TaskEnumTypeValidate taskEnumTypeValidate;
     private final TaskBelongAccountValidate taskBelongAccountValidate;
+    private final AccountValidate accountValidate;
 
 
-
-    public void validate(TaskCreateRequestDto dto) {
+    public void validate(TaskCreateRequestDto dto, Long authorId) {
         if (dto.assigneeId() != null) {
-            validateSelfAssignment(dto.authorId(), dto.assigneeId());
+            validateSelfAssignment(authorId, dto.assigneeId());
         }
+
+        if(dto.assigneeId() != null) {
+            accountValidate.validateAccountExists(dto.assigneeId());
+        }
+
+        accountValidate.validateAccountExists(authorId);
+
         validateStatusType(dto.status());
         validatePriorityType(dto.priority());
     }
 
     public void validate(TaskUserUpdateRequestDto dto, Long assigneeId) {
         validateTaskExists(dto.id());
+        accountValidate.validateAccountExists(assigneeId);
         validateTaskBelongAssignee(assigneeId, dto.id());
         validateStatusType(dto.status());
     }
 
     public void validate(TaskAdminUpdateRequestDto dto, Long authorId) {
+        if (dto.assigneeId() != null) {
+            validateSelfAssignment(authorId, dto.assigneeId());
+        }
+
+        if(dto.assigneeId() != null) {
+            accountValidate.validateAccountExists(dto.assigneeId());
+        }
+
+        accountValidate.validateAccountExists(authorId);
         validateTaskExists(dto.id());
         validateSelfAssignment(authorId, dto.assigneeId());
         validateStatusType(dto.status());
@@ -50,11 +70,11 @@ public class TaskValidate {
         taskExistValidate.checkTaskExistence(taskId);
     }
 
-    private void validateStatusType(String status) {
+    private void validateStatusType(Status status) {
         taskEnumTypeValidate.validateStatus(status);
     }
 
-    private void validatePriorityType(String priority) {
+    private void validatePriorityType(Priority priority) {
         taskEnumTypeValidate.validatePriority(priority);
     }
 

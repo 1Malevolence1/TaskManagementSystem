@@ -20,6 +20,7 @@ import java.util.List;
 @Builder
 @Setter
 @Getter
+
 public class Account implements UserDetails {
 
 
@@ -61,7 +62,14 @@ public class Account implements UserDetails {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "role = " + role + ")";
+        return "Account{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", authoredTasks=" + authoredTasks +
+                ", assignedTasks=" + assignedTasks +
+                ", comments=" + comments +
+                '}';
     }
 }

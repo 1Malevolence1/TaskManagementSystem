@@ -1,5 +1,6 @@
 package com.example.TaskManagementSystem.task.serivce;
 
+import com.example.TaskManagementSystem.account.model.Account;
 import com.example.TaskManagementSystem.account.utils.AccountValidate;
 import com.example.TaskManagementSystem.task.dto.*;
 import com.example.TaskManagementSystem.task.model.Priority;
@@ -10,6 +11,7 @@ import com.example.TaskManagementSystem.utils.exception.PersistenceException;
 import com.example.TaskManagementSystem.task.mapper.TaskMapperManager;
 import com.example.TaskManagementSystem.task.model.Task;
 import com.example.TaskManagementSystem.task.repostory.TaskRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,17 +35,20 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapperManager mapper;
     private final TaskValidate taskValidate;
     private final TaskSpecification taskSpecification;
-    private final AccountValidate accountValidate;
+
 
 
     @Override
     @Transactional
-    public void create(TaskCreateRequestDto dto) {
-        taskValidate.validate(dto);
+    public void create(TaskCreateRequestDto dto, Long authorId) {
+        taskValidate.validate(dto, authorId);
         try {
-            repository.save(mapper.toModel(dto));
+            Task task = mapper.toModel(dto);
+            if(task.getAssignee().getId() == null) task.setAssignee(null);
+            task.setAuthor(Account.builder().id(authorId).build());
+            repository.save(task);
         } catch (DataAccessException e) {
-            throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных"), e);
+            throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных. %s".formatted(e.getMessage())));
         }
     }
 
@@ -52,11 +57,12 @@ public class TaskServiceImpl implements TaskService {
     public void update(TaskAdminUpdateRequestDto dto, Long authorId) {
         taskValidate.validate(dto, authorId);
         Task mapperTask = mapper.toModel(dto);
+        mapperTask.setAuthor(Account.builder().id(authorId).build());
         try {
             repository.findById(dto.id()).ifPresentOrElse(
                     task -> {
                         if (dto.title() != null) task.setTitle(mapperTask.getTitle());
-                     //   if (dto.description() != null) task.setDescription(mapperTask.getDescription());
+                        if (dto.description() != null) task.setDescription(mapperTask.getDescription());
                         if (dto.status() != null) task.setStatus(mapperTask.getStatus());
                         if (dto.priority() != null) task.setPriority(mapperTask.getPriority());
                     }, () -> {
@@ -64,7 +70,7 @@ public class TaskServiceImpl implements TaskService {
                     }
             );
         } catch (DataAccessException e) {
-            throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных"), e);
+            throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных"));
         }
     }
 
@@ -72,8 +78,10 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void update(TaskUserUpdateRequestDto dto, Long assigneeId) {
         taskValidate.validate(dto, assigneeId);
-        Task mapperTask = mapper.toModel(dto);
         try {
+
+            Task mapperTask = mapper.toModel(dto);
+            mapperTask.setAssignee(Account.builder().id(assigneeId).build());
             repository.findById(dto.id()).ifPresentOrElse(
                     task -> {
                         task.setStatus(mapperTask.getStatus());
@@ -82,7 +90,7 @@ public class TaskServiceImpl implements TaskService {
                     }
             );
         } catch (DataAccessException e) {
-            throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных"), e);
+            throw new PersistenceException(new Error("Ошибка при сохранении задачи в базу данных"));
         }
     }
 

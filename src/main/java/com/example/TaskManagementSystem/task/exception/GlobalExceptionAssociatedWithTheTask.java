@@ -4,11 +4,13 @@ import com.example.TaskManagementSystem.utils.exception.Error;
 import com.example.TaskManagementSystem.utils.exception.ErrorProblemDetails;
 import com.example.TaskManagementSystem.utils.exception.PersistenceException;
 import com.example.TaskManagementSystem.utils.exception.ProblemDetailsErrors;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -21,9 +23,17 @@ public class GlobalExceptionAssociatedWithTheTask {
     }
 
     @ExceptionHandler(PersistenceException.class)
-    public ResponseEntity<PersistenceException> handlerTaskPersistenceException(PersistenceException e){
-        return ResponseEntity.badRequest().body(e);
+    public ResponseEntity<Error> handlerTaskPersistenceException(PersistenceException e){
+        return ResponseEntity.badRequest().body(e.getError());
     }
+
+
+
+    @ExceptionHandler(SelfAssignmentException.class)
+    public ResponseEntity<Error> handlerSelfAssignmentException(SelfAssignmentException e){
+        return ResponseEntity.badRequest().body(e.getError());
+    }
+
 
 
     @ExceptionHandler(StatusDoesNotHaveMatchingType.class)
@@ -35,6 +45,8 @@ public class GlobalExceptionAssociatedWithTheTask {
     public ResponseEntity<Error> handlerPriorityDoesNotHaveMatchingType( PriorityDoesNotHaveMatchingType e){
         return ResponseEntity.badRequest().body(e.getError());
     }
+
+
 
     @ExceptionHandler(AssigneeDoesNotBelongTask.class)
     public ResponseEntity<Error> handlerAssigneeDoesNotBelongTask(AssigneeDoesNotBelongTask e){
