@@ -3,7 +3,6 @@ package com.example.TaskManagementSystem.account.controller;
 
 import com.example.TaskManagementSystem.account.dto.AccountCreateRequestDto;
 import com.example.TaskManagementSystem.account.dto.AccountResponseDto;
-import com.example.TaskManagementSystem.account.model.Role;
 import com.example.TaskManagementSystem.account.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,8 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

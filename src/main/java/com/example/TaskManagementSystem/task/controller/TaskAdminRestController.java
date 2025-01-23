@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/admin/tasks")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Управление задачами (Админ)", description = "API для управления задачами. Доступно только для ADMIN.")
+@Tag(name = "Управление задачами (Админ)", description = "API для управления задачами. Доступно только для ADMIN")
 @SecurityRequirement(name = "JWT")
 public class TaskAdminRestController {
 
@@ -36,7 +36,7 @@ public class TaskAdminRestController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(
             summary = "Создать задачу",
-            description = "Создаёт новую задачу. Доступно только для ADMIN."
+            description = "Создаёт новую задачу. Доступно только для ADMIN"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Задача успешно создана", content = @Content),
@@ -63,7 +63,8 @@ public class TaskAdminRestController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(
             summary = "Обновить задачу (Админ)",
-            description = "Обновляет данные задачи. Доступно только для ADMIN."
+            description = "Обновляет данные задачи. Доступно только для ADMIN. " +
+                    "Все поля не обязательны. Если поле не указано, оно не будет обновлено."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Задача успешно обновлена", content = @Content),
@@ -73,12 +74,14 @@ public class TaskAdminRestController {
     @PutMapping("/update")
     public ResponseEntity<Void> updateAdminTask(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Данные для обновления задачи",
+                    description = "Данные для обновления задачи. Все поля не обязательны. " +
+                            "Если поле не указано, оно не будет обновлено",
                     required = true,
                     content = @Content(schema = @Schema(implementation = TaskAdminUpdateRequestDto.class))
             )
             @RequestBody TaskAdminUpdateRequestDto dto,
-            @AuthenticationPrincipal Account userDetails) {
+            @AuthenticationPrincipal Account userDetails
+    ) {
         log.info("start method by updateAdminTask Task. Dto: {}", dto);
         taskService.update(dto, userDetails.getId());
         log.info("task update");
@@ -88,7 +91,7 @@ public class TaskAdminRestController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(
             summary = "Удалить задачу",
-            description = "Удаляет задачу по указанному ID. Доступно только для ADMIN."
+            description = "Удаляет задачу по указанному ID. Доступно только для ADMIN"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Задача успешно удалена", content = @Content),

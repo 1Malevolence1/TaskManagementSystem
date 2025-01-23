@@ -1,6 +1,5 @@
 package com.example.TaskManagementSystem.account.dto;
 
-import com.example.TaskManagementSystem.account.model.Role;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
